@@ -1,10 +1,13 @@
 // This is a Server Component. 
+
+import { fetchGenreDescription } from "@/lib/rawg";
+import { fetchGamesByGenre } from "@/lib/rawg"
+
 // The 'params' object contains the dynamic [genre] from the URL.
 export default async function GenrePage({ params }: { params: { genre: string } }) {
     const { genre } = await params;
     
-    // In a real app, you'd fetch filtered games: 
-    // const games = await prisma.game.findMany({ where: { genre: { equals: genre, mode: 'insensitive' } } });
+    const gamesByGenre = await fetchGamesByGenre(genre)
     
     return (
       <main className="p-8">
@@ -13,14 +16,33 @@ export default async function GenrePage({ params }: { params: { genre: string } 
           <p className="text-gray-600 mt-2">Showing all titles in the {genre} category.</p>
         </header>
   
-        {/* Grid container - reuse the same structure as your dashboard */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {/* Placeholder for filtered game cards */}
-          <div className="border border-gray-200 rounded-2xl p-6 bg-white shadow-sm">
-            <h3 className="font-bold">Example Game Title</h3>
-            <p className="text-sm text-gray-500">Filter logic goes here!</p>
+        
+      {/* Grid container using pure Tailwind v4 syntax */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {gamesByGenre.map((game) => (
+          <div 
+            key={game.id} 
+            className="flex flex-col overflow-hidden bg-white border border-gray-200 rounded-2xl shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md"
+          >
+            <div className="h-40 bg-gray-200"  style={{ backgroundImage: `url(${game.background_image})`, backgroundSize: "cover" }} />
+            <div className="p-5">
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-lg font-bold text-gray-900">{game.name}</h2>
+                <span className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-blue-700 bg-blue-50 rounded-full">
+                  {game.rating}
+                </span>
+              </div>
+              <a 
+                href={`/game/${game.id}`} 
+                className="mt-4 block w-full text-center px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                View Details
+              </a>
+            </div>
           </div>
-        </div>
+        ))}
+      </div>
+
       </main>
     );
   }
