@@ -1,3 +1,4 @@
+import SearchBar from './Search';
 import SidebarLink from './SidebarLink';
 import { fetchGenres } from "@/lib/rawg"
 
@@ -18,6 +19,7 @@ export default async function Sidebar() {
 
   return (
     <aside className="w-64 border-r border-gray-200 h-screen p-6 hidden md:block">
+        <SearchBar/>
       <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-6">Genres</h2>
       <nav className="space-y-2">
         {genres.results.map((genre: RawgGenre) => (

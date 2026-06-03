@@ -1,3 +1,11 @@
+// Define the structure of a game item
+interface Game {
+  id: number;
+  name: string;
+  background_image: string;
+  rating: number;
+}
+
 export async function fetchGames() {
     const url = `https://api.rawg.io/api/games?key=${process.env.RAWG_API_KEY}&page_size=9`;
     
@@ -39,18 +47,20 @@ export async function fetchGames() {
     return response.json();
   }
 
-
-// Define the structure of a game item
-interface Game {
-  id: number;
-  name: string;
-  background_image: string;
-  rating: number;
-}
-
 export async function fetchGamesByGenre(genreSlug: string): Promise<Game[]> {
   const response = await fetch(
     `https://api.rawg.io/api/games?key=${process.env.RAWG_API_KEY}&genres=${genreSlug}`
+  );
+  
+  if (!response.ok) throw new Error("Failed to fetch games for this genre");
+  
+  const data = await response.json();
+  return data.results;
+}
+
+export async function fetchGamesByName(name: string): Promise<Game[]> {
+  const response = await fetch(
+    `https://api.rawg.io/api/games?key=${process.env.RAWG_API_KEY}&search=${name}`
   );
   
   if (!response.ok) throw new Error("Failed to fetch games for this genre");
