@@ -17,3 +17,16 @@ export async function fetchGames() {
     
     return response.json();
   }
+
+  export async function fetchGameDetails(id: string) {
+    const response = await fetch(`https://api.rawg.io/api/games/${id}?key=${process.env.RAWG_API_KEY}`);
+    return response.json();
+  }
+
+  export async function fetchGenres() {
+    const response = await fetch(
+      `https://api.rawg.io/api/genres?key=${process.env.RAWG_API_KEY}`
+    );
+    if (!response.ok) throw new Error("Failed to fetch genres");
+    return response.json();
+  }
