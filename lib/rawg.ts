@@ -7,7 +7,7 @@ interface Game {
 }
 
 export async function fetchGames() {
-    const url = `https://api.rawg.io/api/games?key=${process.env.RAWG_API_KEY}&page_size=9`;
+    const url = `https://api.rawg.io/api/games?key=${process.env.RAWG_API_KEY}`;
     
     const response = await fetch(url, { next: { revalidate: 3600 } });
   
