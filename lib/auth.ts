@@ -3,6 +3,14 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
+// Vercel sets VERCEL_URL per deployment; NextAuth needs a full NEXTAUTH_URL.
+if (!process.env.NEXTAUTH_URL && process.env.VERCEL_URL) {
+  process.env.NEXTAUTH_URL = `https://${process.env.VERCEL_URL}`;
+}
+
+const authSecret =
+  process.env.NEXTAUTH_SECRET ?? process.env.AUTH_SECRET;
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -55,11 +63,11 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string;
+        session.user.id = (token.id as string) ?? token.sub ?? "";
         session.user.email = token.email ?? session.user.email;
       }
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: authSecret,
 };

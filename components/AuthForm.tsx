@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 type AuthMode = "login" | "register";
@@ -13,6 +13,8 @@ interface AuthFormProps {
 
 export default function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -66,7 +68,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         return;
       }
 
-      router.push("/");
+      router.push(callbackUrl);
       router.refresh();
     } catch {
       setError("Something went wrong. Please try again.");
