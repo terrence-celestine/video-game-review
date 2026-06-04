@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import SearchBar from './Search';
 import SidebarLink from './SidebarLink';
+import AuthNav from './AuthNav';
 import { fetchGenres } from "@/lib/rawg"
 
 interface RawgGenre {
@@ -29,6 +30,7 @@ export default async function Sidebar() {
           <SidebarLink key={genre.slug} genre={genre.name} />
         ))}
       </nav>
+      <AuthNav />
     </aside>
   );
 }
