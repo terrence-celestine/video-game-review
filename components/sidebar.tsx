@@ -21,7 +21,7 @@ export default async function Sidebar() {
   return (
     <aside className="w-64 border-r border-gray-200 h-screen p-6 hidden md:block">
       <Suspense fallback={<div>Loading search...</div>}>
-      <SearchBar/>
+        <SearchBar/>
       </Suspense>
       <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-6">Genres</h2>
       <nav className="space-y-2">
